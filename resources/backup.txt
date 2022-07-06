@@ -1,0 +1,317 @@
+import pygame
+import random
+import time
+# import Sleep from time
+pygame.init()
+
+screen = pygame.display.set_mode()
+pygame.display.set_caption("maze runner")
+
+logo = pygame.image.load("rp.png")
+pygame.display.set_icon(logo)
+playerIMG = pygame.image.load("pedestrian-man (1).png")
+# playerIMGl = pygame.image.load("pedestrian-man2.png")
+background = pygame.image.load("background.jpg")
+# wallIMG = pygame.image.load("barrier.png")
+
+# time
+
+playerIMGx = 64
+playerIMGy = 64
+
+screenSize = screen.get_size()
+xAxis = screenSize[0]
+yAxis = screenSize[1]
+
+print(xAxis,yAxis)
+PLx = xAxis / 2
+PLy = 0.8 * yAxis
+changex = 0
+changey = 0
+
+stack = []
+start_ticks = pygame.time.get_ticks()  # starter tick
+
+WLx = 10
+WLy = 10
+changeWx = 0
+changeWy = 0
+
+enemy1 = pygame.image.load("barrier.png")
+enemy2 = pygame.image.load("barrier1.png")
+enemy3 = pygame.image.load("barrier.png")
+enemy4 = pygame.image.load("barrier.png")
+
+enemy5 = pygame.image.load("barrier.png")
+enemy6 = pygame.image.load("barrier.png")
+enemy7 = pygame.image.load("barrier1.png")
+enemy8 = pygame.image.load("barrier.png")
+
+en1x = random.randint(int(xAxis*0.3),int(xAxis*0.32))
+en2x = random.randint(int(xAxis*0.4),int(xAxis*0.42))
+en3x = random.randint(int(xAxis*0.5),int(xAxis*0.52))
+en4x = random.randint(int(xAxis*0.6),int(xAxis*0.62))
+
+en5x = random.randint(int(xAxis*0.3),int(xAxis*0.32))
+en6x = random.randint(int(xAxis*0.4),int(xAxis*0.42))
+en7x = random.randint(int(xAxis*0.5),int(xAxis*0.52))
+en8x = random.randint(int(xAxis*0.6),int(xAxis*0.62))
+
+en1y = random.randint(-80,-60)
+en2y = random.randint(-230,-220)
+en3y = random.randint(-50,-30)
+en4y = random.randint(-180,-170)
+
+en5y = random.randint(-460,-440)
+en6y = random.randint(-600,-590)
+en7y = random.randint(-450,-430)
+en8y = random.randint(-600,-590)
+
+score_value =0
+font = pygame.font.Font('freesansbold.ttf',32)
+
+over_font = pygame.font.Font('freesansbold.ttf',100)
+
+textX = 50
+textY = 50
+
+def game_over():
+    over = over_font.render("GAME OVER",True, (0,10,50))
+    screen.blit(over,(xAxis/2,yAxis/2))
+
+
+def show(x,y):
+    score = font.render("Score : "+ str(score_value//100), True, (0,10,20))
+    screen.blit(score,(x,y))
+
+def player(x, y, flg):
+    if flg == 0:
+        screen.blit(playerIMG, (PLx, PLy))
+    # if flg == 1:
+    #     screen.blit(playerIMGl,(PLx,PLy))
+
+
+
+# def wall(x, y):
+#     screen.blit(wallIMG, (x, y))
+
+
+# def create_wall(y):
+#     x = int(0.3 * xAxis)
+#     y = int(0.7 * yAxis)
+#     val = random.randrange(x, y, 10);
+#     WLx = val
+#     WLy = y
+#     wall(WLx, WLy)
+
+def isCollideSinglePt(enx,eny):
+    arr_row_inc=[0,10,0,10]
+    arr_col_inc=[0,0,30,30]
+    for i in range(0,4):
+        x=arr_row_inc[i]+PLx
+        y=arr_col_inc[i]+PLy
+        if enx<=x and x<=enx+120 and eny<=y and y<=eny+60:
+            return True
+
+    return False
+
+
+def isCollide ():
+    if isCollideSinglePt(en1x,en1y) or isCollideSinglePt(en2x,en2y) or isCollideSinglePt(en3x,en3y) or isCollideSinglePt(en4x,en4y):
+        return True
+    if isCollideSinglePt(en5x,en5y) or isCollideSinglePt(en6x,en6y) or isCollideSinglePt(en7x,en7y) or isCollideSinglePt(en8x,en8y):
+        return True
+    #Shantanu
+    # if PLx<=en1x and en1x<=PLx+64 and PLy<=en1y and en1y<=PLy+64:
+    #     return True
+    # if PLx<=en2x and en2x<=PLx+64 and PLy<=en2y and en2y<=PLy+64:
+    #     return True
+    # if PLx<=en3x and en3x<=PLx+64 and PLy<=en3y and en3y<=PLy+64:
+    #     return True
+
+    #Bhargav
+    # if PLx >= en1x and PLx <= en1x+120 and PLy >= en1y and PLy <= en1y + 60:
+    #     return True
+    # if PLx >= en2x and PLx <= en2x+120 and PLy >= en2y and PLy <= en2y + 60:
+    #     return True
+    # if PLx >= en3x and PLx <= en3x+120 and PLy >= en3y and PLy <= en3y + 60:
+    #     return True
+    #
+    # if PLx+64 >= en1x and PLx+64 <= en1x+120 and PLy >= en1y and PLy <= en1y + 60:
+    #     return True
+    # if PLx+64 >= en2x and PLx+64 <= en2x+120 and PLy >= en2y and PLy <= en2y + 60:
+    #     return True
+    # if PLx >= en3x and PLx <= en3x+120 and PLy >= en3y and PLy <= en3y + 60:
+    #     return True
+    #
+    # if PLx >= en1x and PLx <= en1x+120 and PLy >= en1y and PLy <= en1y + 60:
+    #     return True
+    # if PLx >= en2x and PLx <= en2x+120 and PLy >= en2y and PLy <= en2y + 60:
+    #     return True
+    # if PLx >= en3x and PLx <= en3x+120 and PLy >= en3y and PLy <= en3y + 60:
+    #     return True
+    return False
+
+def check(x, y):
+    global PLx
+    flg = 0
+    if x > xAxis * 0.7-50:
+        PLx = xAxis * 0.7-50
+        flg = 2
+    if x < xAxis * 0.3:
+        PLx = xAxis * 0.3
+        flg = 1
+    global PLy
+    if y < yAxis * 0.45:
+        PLy = yAxis * 0.45
+    if y > yAxis * 0.8:
+        PLy = yAxis * 0.8
+    return flg
+
+flgs = 1
+def pause():
+    flgs = 0
+incValue = 0
+
+running = True
+
+flgp = 0
+while running:
+    if isCollide() :
+        game_over()
+        print(score_value)
+        running = False
+
+
+    screen.fill((231, 123, 23))
+    screen.blit(background,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            stack.append(event.key)
+        elif event.type == pygame.KEYUP:
+            stack.remove(event.key)
+
+        if len(stack) != 0:
+            key = stack.pop()
+            stack.append(key)
+            if key == pygame.K_RIGHT:
+                changex = 1
+                changey = 0
+            elif key == pygame.K_LEFT:
+                changex = -1
+                changey = 0
+            elif key == pygame.K_DOWN:
+                changex = 0
+                changey = 1
+            elif key == pygame.K_UP:
+                changex = 0
+                changey = -1
+            elif key == pygame.K_SPACE:
+                pause()
+                changey = 0
+                changex = 0
+
+                en1y += 0
+                en2y += 0
+                en3y += 0
+                en4y += 0
+                en5y += 0
+                en6y += 0
+                en7y += 0
+                en8y += 0
+
+                pygame.disable.K_UP
+
+
+            elif PLx == 0.3*xAxis:
+                changex = 1
+            elif PLx == 0.7*xAxis:
+                changex = -1
+        if len(stack) == 0:
+            changex = 0
+            changey = 0
+    PLx += changex
+    PLy += changey
+    flg = check(PLx, PLy)
+    if flg == 1:
+        PLx -=0.5
+    if flg == 2:
+        PLx +=0.5
+
+
+    if flgp == 0:
+        player(PLx, PLy,0)
+        flgp=1
+    if flgp == 1:
+        player(PLx,PLy,1)
+        flgp=0
+
+    en1y += 0.8+incValue
+    en2y += 0.8+incValue
+    en3y += 0.8+incValue
+    en4y += 0.8+incValue
+    en5y += 0.8+incValue
+    en6y += 0.8+incValue
+    en7y += 0.8+incValue
+    en8y += 0.8+incValue
+
+    if en1y >= yAxis:
+        en1x = random.randint(int(xAxis*0.3),int(xAxis*0.32))
+        en1y = random.randint(-70,-60)
+
+    if en2y >= yAxis:
+        en2x = random.randint(int(xAxis*0.41),int(xAxis*0.42))
+        en2y = random.randint(-220,-210)
+
+    if en3y >= yAxis:
+        en3x = random.randint(int(xAxis*0.51),int(xAxis*0.52))
+        en3y = random.randint(-40,-30)
+
+    if en4y >= yAxis:
+        en4x = random.randint(int(xAxis*0.61),int(xAxis*0.62))
+        en4y = random.randint(-180,-170)
+
+    if en5y >= yAxis:
+        en5x = random.randint(int(xAxis*0.3),int(xAxis*0.32))
+        en5y = -random.randint(170,180)
+
+    if en6y >= yAxis:
+        en6x = random.randint(int(xAxis*0.4),int(xAxis*0.42))
+        en6y = -random.randint(440,450)
+
+    if en7y >= yAxis:
+        en7x = random.randint(int(xAxis*0.5),int(xAxis*0.52))
+        en7y = -random.randint(190,200)
+
+    if en8y >= yAxis:
+        en8x = random.randint(int(xAxis*0.6),int(xAxis*0.62))
+        en8y = -random.randint(590,600)
+
+    screen.blit(enemy1, (en1x, en1y))
+    screen.blit(enemy2, (en2x, en2y))
+    screen.blit(enemy3, (en3x, en3y))
+    screen.blit(enemy4, (en4x, en4y))
+    screen.blit(enemy5, (en5x, en5y))
+    screen.blit(enemy6, (en6x, en6y))
+    screen.blit(enemy7, (en7x, en7y))
+    screen.blit(enemy8, (en8x, en8y))
+
+    score_value += 1
+
+    show(textX,textY)
+    # if isCollide() :
+    #     running = False
+    # changeWx = 0.1
+    # changeWy = 0
+    # WLx += changeWx
+    # WLy += changeWy
+    # wall(WLx,WLy)
+
+    seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # calculate how many seconds
+    if seconds > 15:
+        incValue += 0.1
+        start_ticks = pygame.time.get_ticks()
+
+    pygame.display.update()
